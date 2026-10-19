@@ -7,72 +7,104 @@
 <title>Mes Mails</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  :root { --bg: #0a0a0a; --panel: #141414; --panel-2: #1c1c1c; --border: #262626; --ink: #f5f5f5; --ink-dim: #8a8a8a; --accent: #4a9eff; --success: #2d8a4e; --error: #c0392b; }
+  :root {
+    --bg: #0a0a0a; --panel: #141414; --panel-2: #1c1c1c;
+    --border: #262626; --ink: #f5f5f5; --ink-dim: #8a8a8a;
+    --accent: #4a9eff; --success: #2d8a4e; --error: #c0392b;
+  }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; font-size: 15px; line-height: 1.5; }
 
   /* LOGIN */
   #login-screen { position: fixed; inset: 0; z-index: 1000; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; }
   #login-screen.hidden { display: none; }
-  .login-logo { width: 96px; height: 96px; margin-bottom: 1.5rem; border-radius: 24px; background: linear-gradient(135deg, #1a1a2e, #0a0a0a); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
-  .login-logo svg { width: 60%; height: 60%; }
-  .login-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.3rem; }
-  .login-sub { font-size: 0.85rem; color: var(--ink-dim); margin-bottom: 2rem; text-align: center; }
-  .login-form { width: 100%; max-width: 340px; }
-  .login-input { width: 100%; padding: 0.95rem 1rem; border-radius: 10px; border: 1px solid var(--border); background: var(--panel); color: var(--ink); font-size: 0.95rem; font-family: inherit; margin-bottom: 0.8rem; text-align: center; letter-spacing: 0.1em; }
-  .login-input:focus { outline: none; border-color: var(--accent); }
-  .login-btn { width: 100%; padding: 0.95rem; border-radius: 10px; border: none; background: var(--accent); color: #fff; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
-  .login-error { color: var(--error); font-size: 0.82rem; text-align: center; margin-top: 0.8rem; min-height: 1.2em; }
+  .login-logo { width: 80px; height: 80px; margin-bottom: 1.5rem; border-radius: 20px; background: linear-gradient(135deg, #1a1a2e, #0a0a0a); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
+  .login-logo svg { width: 50%; height: 50%; }
+  .login-title { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .login-sub { font-size: 0.85rem; color: var(--ink-dim); margin-bottom: 2rem; }
+  .login-form { width: 100%; max-width: 320px; }
+  .login-input { width: 100%; padding: 0.9rem; border-radius: 10px; border: 1px solid var(--border); background: var(--panel); color: var(--ink); font-size: 0.95rem; margin-bottom: 0.8rem; text-align: center; }
+  .login-btn { width: 100%; padding: 0.9rem; border-radius: 10px; border: none; background: var(--accent); color: #fff; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
+  .login-error { color: var(--error); font-size: 0.82rem; text-align: center; margin-top: 0.8rem; }
 
   /* APP */
   #app { display: none; } #app.visible { display: block; }
-  header { position: sticky; top: 0; z-index: 10; background: var(--panel); border-bottom: 1px solid var(--border); padding: 0.9rem 1rem; display: flex; justify-content: space-between; align-items: center; }
-  header h1 { font-size: 1.05rem; font-weight: 600; }
-  header .actions { display: flex; gap: 0.4rem; }
+  header { position: sticky; top: 0; z-index: 10; background: var(--panel); border-bottom: 1px solid var(--border); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 1.1rem; font-weight: 600; }
+  header .actions { display: flex; gap: 0.5rem; }
   header button { background: var(--accent); color: #fff; border: none; padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-  header button.logout { background: var(--panel-2); color: var(--ink-dim); padding: 0.5rem 0.7rem; }
+  header button.logout { background: var(--panel-2); color: var(--ink-dim); padding: 0.5rem 0.7rem; font-size: 0.9rem; }
+  header button.settings { background: var(--panel-2); color: var(--ink-dim); padding: 0.5rem 0.7rem; font-size: 0.9rem; }
 
   .tabs { display: flex; background: var(--panel); border-bottom: 1px solid var(--border); position: sticky; top: 57px; z-index: 9; }
   .tab { flex: 1; text-align: center; padding: 0.75rem; font-size: 0.8rem; color: var(--ink-dim); cursor: pointer; border-bottom: 2px solid transparent; }
   .tab.active { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
 
   /* LISTE DES MAILS */
-  .list { padding: 0.5rem; }
-  .mail-item { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 0.8rem 0.9rem; margin-bottom: 0.5rem; cursor: pointer; border-left-width: 3px; border-left-color: var(--accent); }
-  .mail-header { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; }
-  .mail-from { font-size: 0.85rem; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .mail-subject { font-size: 0.82rem; margin: 0.15rem 0; font-weight: 500; }
+  .list { padding: 0.8rem; }
+  .mail-item {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 0.9rem 1rem; margin-bottom: 0.8rem;
+    cursor: pointer; border-left: 4px solid var(--accent);
+    transition: background 0.2s; display: flex; flex-direction: column;
+  }
+  .mail-item:active { background: var(--panel-2); }
+  .mail-item.gmail { border-left-color: #ea4335; }
+  .mail-item.yahoo { border-left-color: #6001d2; }
+  .mail-item.outlook { border-left-color: #0078d4; }
+  .mail-item.icloud { border-left-color: #555; }
+  .mail-item.custom { border-left-color: var(--accent); }
+
+  .mail-header { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; margin-bottom: 0.3rem; }
+  .mail-from { font-size: 0.85rem; font-weight: 600; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mail-date { font-size: 0.7rem; color: var(--ink-dim); flex-shrink: 0; }
+  
+  .mail-subject { font-size: 0.85rem; color: var(--ink); font-weight: 500; margin-bottom: 0.3rem; }
   .mail-preview { font-size: 0.75rem; color: var(--ink-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .mail-date { font-size: 0.68rem; color: var(--ink-dim); margin-top: 0.3rem; }
+  
+  .mail-badge { 
+    display: inline-block; font-size: 0.6rem; padding: 0.1rem 0.4rem; 
+    border-radius: 4px; background: var(--panel-2); color: var(--ink-dim); 
+    margin-left: 0.3rem; font-weight: 600; text-transform: uppercase;
+  }
 
   /* DETAIL */
   .detail { padding: 1rem; }
   .detail-header { margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-  .detail-subject { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
-  .detail-meta { font-size: 0.78rem; color: var(--ink-dim); }
-  .detail-body { font-size: 0.9rem; white-space: pre-wrap; word-break: break-word; padding: 1rem; background: var(--panel); border-radius: 10px; border: 1px solid var(--border); min-height: 100px; overflow-x: auto; }
-  .detail-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
-
-  /* BOUTONS */
-  .btn { flex: 1; padding: 0.85rem; border-radius: 10px; border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .detail-subject { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .detail-meta { font-size: 0.8rem; color: var(--ink-dim); margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.4rem; }
+  .detail-body { font-size: 0.92rem; white-space: pre-wrap; word-break: break-word; padding: 1rem; background: var(--panel); border-radius: 10px; border: 1px solid var(--border); min-height: 150px; overflow-x: auto; line-height: 1.6; }
+  .detail-actions { display: flex; gap: 0.6rem; margin-top: 1rem; }
+  .btn { flex: 1; padding: 0.9rem; border-radius: 10px; border: none; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: inherit; }
   .btn-primary { background: var(--accent); color: #fff; }
   .btn-secondary { background: var(--panel-2); color: var(--ink); border: 1px solid var(--border); }
   .btn-back { background: transparent; color: var(--accent); border: none; padding: 0.5rem 0; font-size: 0.9rem; cursor: pointer; margin-bottom: 0.5rem; }
 
   /* COMPOSER */
   .compose { padding: 1rem; }
-  .field { margin-bottom: 0.8rem; }
-  .field label { display: block; font-size: 0.72rem; color: var(--ink-dim); text-transform: uppercase; margin-bottom: 0.3rem; font-weight: 600; }
-  .field input, .field textarea { width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); background: var(--panel); color: var(--ink); font-family: inherit; font-size: 0.9rem; }
-  .field textarea { min-height: 180px; resize: vertical; }
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 0.75rem; color: var(--ink-dim); text-transform: uppercase; margin-bottom: 0.4rem; font-weight: 600; }
+  .field input, .field textarea, .field select { width: 100%; padding: 0.9rem; border-radius: 10px; border: 1px solid var(--border); background: var(--panel); color: var(--ink); font-family: inherit; font-size: 0.95rem; }
+  .field textarea { min-height: 200px; resize: vertical; }
 
-  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: var(--bg); padding: 0.8rem 1.2rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; transition: transform 0.3s, opacity 0.3s; opacity: 0; z-index: 100; }
+  /* MODAL COMPTE */
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; z-index: 500; align-items: center; justify-content: center; padding: 1rem; }
+  .modal.show { display: flex; }
+  .modal-content { background: var(--panel); border-radius: 16px; width: 100%; max-width: 400px; padding: 1.5rem; max-height: 90vh; overflow-y: auto; }
+  .modal-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
+  .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+  .preset-btn { padding: 0.8rem 0.4rem; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--border); color: var(--ink); font-size: 0.75rem; font-weight: 600; cursor: pointer; text-align: center; font-family: inherit; }
+  .preset-btn.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* TOAST & UTILS */
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: var(--bg); padding: 0.8rem 1.2rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; transition: transform 0.3s, opacity 0.3s; opacity: 0; z-index: 100; max-width: 90vw; text-align: center; }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
   .toast.error { background: var(--error); color: #fff; }
-  
+  .toast.success { background: var(--success); color: #fff; }
   .empty { text-align: center; color: var(--ink-dim); padding: 3rem 1rem; }
   .loading { text-align: center; padding: 2rem; color: var(--ink-dim); }
   .spinner { width: 24px; height: 24px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 0.8rem; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  .view { display: none; } .view.active { display: block; }
 </style>
 </head>
 <body>
@@ -82,7 +114,7 @@
   <div class="login-title">Mes Mails</div>
   <div class="login-sub">Toutes vos boîtes, en un seul endroit</div>
   <div class="login-form">
-    <input type="password" class="login-input" id="login-password" placeholder="••••••••">
+    <input type="password" class="login-input" id="login-password" placeholder="Entrez votre mot de passe">
     <button class="login-btn" id="login-btn">Se connecter</button>
     <div class="login-error" id="login-error"></div>
   </div>
@@ -92,6 +124,7 @@
   <header>
     <h1>Mes Mails</h1>
     <div class="actions">
+      <button class="settings" id="settings-btn">⚙️</button>
       <button id="refresh-btn">↻</button>
       <button class="logout" id="logout-btn">Déconnexion</button>
     </div>
@@ -110,6 +143,7 @@
       <div class="detail-header">
         <div class="detail-subject" id="d-subject"></div>
         <div class="detail-meta" id="d-from"></div>
+        <div class="detail-meta" id="d-badge"></div>
         <div class="detail-meta" id="d-date"></div>
       </div>
       <div class="detail-body" id="d-body"></div>
@@ -122,6 +156,10 @@
 
   <div class="view" id="view-compose">
     <div class="compose">
+      <div class="field">
+        <label>Depuis</label>
+        <select id="c-from"></select>
+      </div>
       <div class="field"><label>À</label><input type="email" id="c-to" placeholder="destinataire@exemple.com"></div>
       <div class="field"><label>Objet</label><input type="text" id="c-subject" placeholder="Objet"></div>
       <div class="field"><label>Message</label><textarea id="c-body" placeholder="Votre message…"></textarea></div>
@@ -130,10 +168,49 @@
   </div>
 </div>
 
+<!-- MODAL AJOUTER COMPTE -->
+<div class="modal" id="modal-add-account">
+  <div class="modal-content">
+    <div class="modal-title">Ajouter un compte mail</div>
+    <div class="preset-grid">
+      <button class="preset-btn selected" data-provider="gmail">📧 Gmail</button>
+      <button class="preset-btn" data-provider="yahoo">💌 Yahoo</button>
+      <button class="preset-btn" data-provider="outlook">📨 Outlook</button>
+      <button class="preset-btn" data-provider="icloud">☁️ iCloud</button>
+      <button class="preset-btn" data-provider="custom">⚙️ Autre</button>
+    </div>
+    
+    <div class="field">
+      <label>Nom du compte</label>
+      <input type="text" id="acc-label" placeholder="Ex : Gmail perso">
+    </div>
+    <div class="field">
+      <label>Adresse email</label>
+      <input type="email" id="acc-email" placeholder="ton.email@exemple.com">
+    </div>
+    <div class="field">
+      <label>Mot de passe d'application</label>
+      <input type="password" id="acc-password" placeholder="••••••••••••••••">
+    </div>
+    <div class="field" id="custom-fields" style="display:none;">
+      <label>Serveur IMAP (Réception)</label>
+      <input type="text" id="acc-imap" placeholder="imap.exemple.com">
+      <label style="margin-top:0.5rem;">Serveur SMTP (Envoi)</label>
+      <input type="text" id="acc-smtp" placeholder="smtp.exemple.com">
+    </div>
+    
+    <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+      <button class="btn btn-secondary" id="modal-cancel" style="width:50%;">Annuler</button>
+      <button class="btn btn-primary" id="modal-save" style="width:50%;">Ajouter</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-  const API = 'https://mail-backend-aoh4.onrender.com';
+  // ⚠️ POUR TESTER EN LOCAL, GARDE localhost. POUR DÉPLOYER, REMPLACE PAR RENDER.
+  const API = 'http://localhost:3000'; 
   const TOKEN_KEY = 'mail_token';
 
   const $ = id => document.getElementById(id);
@@ -143,20 +220,27 @@
 
   let currentMail = null;
   let currentUtterance = null;
+  let accountsList = [];
+  let selectedProvider = 'gmail';
 
   function toast(msg, type = 'success') {
     const t = $('toast'); t.textContent = msg; t.className = 'toast show ' + type;
     setTimeout(() => t.className = 'toast ' + type, 2500);
   }
 
-  // Fonction de décodage pour éviter les caractères bizarres (M4�...)
-  function decodeString(str) {
+  // NETTOYAGE AGRESSIF DES LIENS ET DU HTML
+  function cleanText(str) {
     if (!str) return '';
-    try {
-      return decodeURIComponent(escape(str));
-    } catch (e) {
-      return str;
-    }
+    let clean = str;
+    // Remplacer les liens très longs par [Lien]
+    clean = clean.replace(/(https?:\/\/[^\s]{30,})/g, '[Lien cliquable]');
+    // Supprimer les balises HTML
+    clean = clean.replace(/<[^>]*>/g, '');
+    // Enlever les caractères bizarres
+    clean = clean.replace(/[^\x20-\x7E\xC0-\xFF\u0100-\u017F\u2000-\u206F\n]/g, ' ');
+    // Réduire les espaces multiples
+    clean = clean.replace(/[ \t]+/g, ' ').trim();
+    return clean;
   }
 
   async function apiFetch(path, options = {}) {
@@ -170,15 +254,26 @@
   }
 
   function showLogin() { $('login-screen').classList.remove('hidden'); $('app').classList.remove('visible'); }
-  function showApp() { $('login-screen').classList.add('hidden'); $('app').classList.add('visible'); loadMails(); }
+  function showApp() { $('login-screen').classList.add('hidden'); $('app').classList.add('visible'); loadAccounts().then(() => loadMails()); }
 
   async function doLogin() {
     const pwd = $('login-password').value; if (!pwd) return;
+    const btn = $('login-btn'); btn.disabled = true; btn.textContent = 'Connexion…';
     try {
       const res = await fetch(API + '/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pwd }) });
       const data = await res.json();
       if (data.ok && data.token) { setToken(data.token); showApp(); } else $('login-error').textContent = data.error;
     } catch (e) { $('login-error').textContent = 'Erreur réseau'; }
+    finally { btn.disabled = false; btn.textContent = 'Se connecter'; }
+  }
+
+  async function loadAccounts() {
+    try {
+      const res = await apiFetch('/api/accounts');
+      accountsList = await res.json();
+      const sel = $('c-from');
+      sel.innerHTML = accountsList.map(a => `<option value="${a.id}">${a.label} &lt;${a.email}&gt;</option>`).join('');
+    } catch (e) {}
   }
 
   async function loadMails() {
@@ -187,70 +282,148 @@
       const res = await apiFetch('/api/mails');
       const mails = await res.json();
       if (!mails.length) { list.innerHTML = '<div class="empty">📭 Aucun mail</div>'; return; }
-      list.innerHTML = mails.map((m, i) => `
-        <div class="mail-item" data-idx="${i}">
-          <div class="mail-header"><div class="mail-from">${decodeString(m.from)}</div></div>
-          <div class="mail-subject">${decodeString(m.subject)}</div>
-          <div class="mail-preview">${decodeString(m.preview)}</div>
-        </div>`).join('');
+      
+      list.innerHTML = mails.map((m, i) => {
+        const from = cleanText(m.from).split('<')[0].trim() || 'Inconnu';
+        const subject = cleanText(m.subject) || '(Sans objet)';
+        const preview = cleanText(m.preview).slice(0, 80);
+        const provider = m.provider || 'custom';
+        const date = m.date ? new Date(m.date).toLocaleDateString('fr-FR', {day:'2-digit', month:'short'}) : '';
+        
+        return `
+        <div class="mail-item ${provider}" data-idx="${i}">
+          <div class="mail-header">
+            <div class="mail-from">${from} <span class="mail-badge">${provider}</span></div>
+            <div class="mail-date">${date}</div>
+          </div>
+          <div class="mail-subject">${subject}</div>
+          <div class="mail-preview">${preview}</div>
+        </div>`;
+      }).join('');
+
       window._mails = mails;
       list.querySelectorAll('.mail-item').forEach(el => el.addEventListener('click', () => openMail(parseInt(el.dataset.idx))));
-    } catch (e) { list.innerHTML = '<div class="empty">❌ Erreur</div>'; }
+    } catch (e) { list.innerHTML = '<div class="empty">❌ Erreur de connexion</div>'; }
   }
 
   function openMail(idx) {
     const m = window._mails[idx]; if (!m) return;
     currentMail = m;
-    $('d-subject').textContent = decodeString(m.subject);
-    $('d-from').textContent = decodeString(m.from);
-    $('d-date').textContent = m.date;
-    // On nettoie le body des caractères bizarres
-    $('d-body').textContent = decodeString(m.body);
     
+    $('d-subject').textContent = cleanText(m.subject);
+    $('d-from').textContent = 'De : ' + cleanText(m.from);
+    $('d-badge').innerHTML = `Compte : <span class="mail-badge" style="background:var(--panel-2); color:var(--ink);">${m.provider || 'custom'}</span>`;
+    $('d-date').textContent = m.date;
+    
+    let bodyText = cleanText(m.body);
+    if (bodyText.length < 10) bodyText = "(Contenu illisible ou vide)";
+    $('d-body').textContent = bodyText;
+
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     $('view-detail').classList.add('active');
   }
 
-  // IA Parlante (Text-to-Speech)
   function speakText(text) {
     if (currentUtterance) window.speechSynthesis.cancel();
     currentUtterance = new SpeechSynthesisUtterance(text);
-    currentUtterance.lang = 'fr-FR'; // Voix française
-    currentUtterance.rate = 1; // Vitesse normale
+    currentUtterance.lang = 'fr-FR';
     window.speechSynthesis.speak(currentUtterance);
   }
 
   async function sendMail() {
-    const to = $('c-to').value, subject = $('c-subject').value, body = $('c-body').value;
-    if (!to || !body) return toast('Champs requis', 'error');
+    const account_id = parseInt($('c-from').value, 10);
+    const to = $('c-to').value.trim();
+    const subject = $('c-subject').value.trim();
+    const body = $('c-body').value.trim();
+    if (!to || !body) return toast('Destinataire et message requis', 'error');
+    
+    const btn = $('send-btn'); btn.disabled = true; btn.textContent = 'Envoi…';
     try {
-      const res = await apiFetch('/api/send', { method: 'POST', body: JSON.stringify({ account_id: 3, to, subject, body }) });
+      const res = await apiFetch('/api/send', { method: 'POST', body: JSON.stringify({ account_id, to, subject, body }) });
       const data = await res.json();
       if (data.ok) { 
-        toast('Envoyé !'); 
-        speakText("Votre mail a bien été envoyé."); // IA parlante à l'envoi
+        toast('✓ Mail envoyé', 'success'); 
+        speakText("Votre mail a bien été envoyé."); 
         $('c-to').value = ''; $('c-subject').value = ''; $('c-body').value = ''; 
-      }
-      else toast(data.error, 'error');
+      } else toast(data.error, 'error');
+    } catch (e) { toast('Erreur réseau', 'error'); }
+    finally { btn.disabled = false; btn.textContent = 'Envoyer'; }
+  }
+
+  // GESTION DES COMPTES (MODAL)
+  function openModal() {
+    $('modal-add-account').classList.add('show');
+  }
+  function closeModal() {
+    $('modal-add-account').classList.remove('show');
+  }
+  function selectProvider(provider) {
+    selectedProvider = provider;
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('selected', b.dataset.provider === provider));
+    $('custom-fields').style.display = (provider === 'custom') ? 'block' : 'none';
+    
+    // Remplissage automatique des champs IMAP/SMTP selon le fournisseur
+    const cfg = {
+      gmail: { imap: 'imap.gmail.com', smtp: 'smtp.gmail.com' },
+      yahoo: { imap: 'imap.mail.yahoo.com', smtp: 'smtp.mail.yahoo.com' },
+      outlook: { imap: 'outlook.office365.com', smtp: 'smtp.office365.com' },
+      icloud: { imap: 'imap.mail.me.com', smtp: 'smtp.mail.me.com' }
+    }[provider] || { imap: '', smtp: '' };
+    
+    $('acc-imap').value = cfg.imap;
+    $('acc-smtp').value = cfg.smtp;
+  }
+
+  async function saveAccount() {
+    const label = $('acc-label').value.trim();
+    const email = $('acc-email').value.trim();
+    const password = $('acc-password').value;
+    const imap = $('acc-imap').value.trim();
+    const smtp = $('acc-smtp').value.trim();
+    
+    if (!email || !password) return toast('Email et mot de passe requis', 'error');
+    
+    const body = {
+      label: label || email, email, password,
+      provider: selectedProvider,
+      imap_host: imap, imap_port: 993,
+      smtp_host: smtp, smtp_port: 465, smtp_secure: true
+    };
+    
+    try {
+      const res = await apiFetch('/api/accounts', { method: 'POST', body: JSON.stringify(body) });
+      const data = await res.json();
+      if (data.ok) {
+        toast('Compte ajouté', 'success');
+        closeModal();
+        await loadAccounts();
+        loadMails();
+      } else toast(data.error, 'error');
     } catch (e) { toast('Erreur réseau', 'error'); }
   }
 
-  // Événements
+  // ÉVÉNEMENTS
   $('login-btn').addEventListener('click', doLogin);
-  $('logout-btn').addEventListener('click', () => { clearToken(); showLogin(); });
+  $('logout-btn').addEventListener('click', () => { if(confirm('Se déconnecter ?')) { clearToken(); showLogin(); } });
   $('refresh-btn').addEventListener('click', loadMails);
+  $('settings-btn').addEventListener('click', openModal);
+  $('modal-cancel').addEventListener('click', closeModal);
+  $('modal-save').addEventListener('click', saveAccount);
+  $('send-btn').addEventListener('click', sendMail);
+
+  document.querySelectorAll('.preset-btn').forEach(b => b.addEventListener('click', () => selectProvider(b.dataset.provider)));
   
   $('back-btn').addEventListener('click', () => { 
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
     $('view-inbox').classList.add('active'); 
-    if (currentUtterance) window.speechSynthesis.cancel(); // Coupe la voix au retour
+    if (currentUtterance) window.speechSynthesis.cancel();
   });
 
   $('reply-btn').addEventListener('click', () => {
     if (!currentMail) return;
     $('c-to').value = currentMail.from.replace(/<[^>]+>/, '').trim() || currentMail.from; 
-    $('c-subject').value = 'Re: ' + currentMail.subject;
-    $('c-body').value = '\n\n--- Message original ---\n' + currentMail.body.slice(0, 500);
+    $('c-subject').value = 'Re: ' + cleanText(currentMail.subject);
+    $('c-body').value = '\n\n--- Message original ---\n' + cleanText(currentMail.body).slice(0, 500);
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active')); 
     document.querySelector('[data-tab="compose"]').classList.add('active');
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
@@ -258,18 +431,18 @@
   });
 
   $('speak-btn').addEventListener('click', () => {
-    if (currentMail) speakText("De " + currentMail.from + ". Sujet : " + currentMail.subject + ". " + currentMail.body);
+    if (currentMail) speakText("De " + cleanText(currentMail.from) + ". Sujet : " + cleanText(currentMail.subject) + ". " + cleanText(currentMail.body));
   });
-
-  $('send-btn').addEventListener('click', sendMail);
 
   document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(x => x.classList.remove('active')); t.classList.add('active');
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
     $('view-' + t.dataset.tab).classList.add('active');
+    if (t.dataset.tab !== 'detail' && currentUtterance) window.speechSynthesis.cancel();
   }));
 
-  if (getToken()) showApp();
+  // INIT
+  if (getToken()) showApp(); else showLogin();
 </script>
 </body>
 </html>
